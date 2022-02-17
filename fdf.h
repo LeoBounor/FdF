@@ -6,30 +6,46 @@
 /*   By: Leo <Leo@student.42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 15:36:55 by Leo               #+#    #+#             */
-/*   Updated: 2022/01/12 11:34:59 by Leo              ###   ########lyon.fr   */
+/*   Updated: 2022/01/17 16:55:40 by Leo              ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 
-# include "minilibx_mms_20191025_beta/mlx.h"
+# include "minilibx_macos/mlx.h"
 # include "get_next_line/get_next_line.h"
 # include <fcntl.h>
 # include <stdio.h>
+# include <math.h>
 
-typedef struct fdf
+typedef struct s_fdf
 {
-	int		width;
-	int		height;
-	int		**tab4matrix;
-}			t_fdf;
+	int			width;
+	int			height;
+	int			**tab4matrix;
+	t_data		*img;
+}	t_fdf;
+
+typedef struct s_data {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	int		zoom;
+}	t_data;
 
 /* FUNCTIONS FOR READ FILE */
 void	ft_readfile(char *file, t_fdf *fdf);
 void	ft_fill_matrix(int *tab4matrix, char *line);
 int		ft_getwidth(char *file);
 int		ft_getheight(char *file);
+
+/* FUNCTIONS FOR DRAW */
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void	bresenham(float x0, float y0, float x1, float y1, t_fdf *fdf);
+void	drawline(t_data *data, t_fdf *fdf);
 
 /* FUNCTIONS UTILS */
 char	**ft_split(const char *s, char c);

@@ -6,7 +6,7 @@
 /*   By: Leo <Leo@student.42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 15:36:45 by Leo               #+#    #+#             */
-/*   Updated: 2022/01/12 11:49:24 by Leo              ###   ########lyon.fr   */
+/*   Updated: 2022/01/12 15:13:44 by Leo              ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	ft_getwidth(char *file)
 	fd = open(file, O_RDONLY, 0);
 	line = get_next_line(fd);
 	width = 0;
+	i = 0;
 	while (line[i])
 	{
 		while (line[i] == ' ' && line[i])
@@ -39,22 +40,13 @@ int	ft_getwidth(char *file)
 int	ft_getheight(char *file)
 {
 	int		height;
-	char	*line;
 	int		fd;
 
 	fd = open(file, O_RDONLY, 0);
-	line = get_next_line(fd);
 	height = 0;
-	if (line)
-	{
+	while (get_next_line(fd))
 		height++;
-		while (line)
-		{
-			line = get_next_line(fd);
-			height++;
-		}
-		return (height);
-	}
+	close(fd);
 	return (height);
 }
 
