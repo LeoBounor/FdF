@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Leo <Leo@student.42lyon.fr>                +#+  +:+       +#+        */
+/*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 15:36:55 by Leo               #+#    #+#             */
-/*   Updated: 2022/01/17 16:55:40 by Leo              ###   ########lyon.fr   */
+/*   Updated: 2022/02/17 14:30:47 by lbounor          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ typedef struct s_fdf
 	int			width;
 	int			height;
 	int			**tab4matrix;
-	t_data		*img;
 }	t_fdf;
 
 typedef struct s_data {
@@ -34,6 +33,9 @@ typedef struct s_data {
 	int		line_length;
 	int		endian;
 	int		zoom;
+	int		color;
+	void	*mlx_ptr;
+	void	*win_ptr;
 }	t_data;
 
 /* FUNCTIONS FOR READ FILE */
@@ -44,7 +46,9 @@ int		ft_getheight(char *file);
 
 /* FUNCTIONS FOR DRAW */
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void	bresenham(float x0, float y0, float x1, float y1, t_fdf *fdf);
+float	mod(float i);
+void	isometric(float *x, float *y, int z);
+void	bresenham(float x0, float y0, float x1, float y1, t_data *data, t_fdf *fdf);
 void	drawline(t_data *data, t_fdf *fdf);
 
 /* FUNCTIONS UTILS */
