@@ -6,7 +6,7 @@
 /*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 15:36:55 by Leo               #+#    #+#             */
-/*   Updated: 2022/02/17 14:30:47 by lbounor          ###   ########lyon.fr   */
+/*   Updated: 2022/03/02 15:31:23 by lbounor          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ typedef struct s_data {
 	int		endian;
 	int		zoom;
 	int		color;
-	void	*mlx_ptr;
-	void	*win_ptr;
+	void	*mlx;
+	void	*mlx_win;
 }	t_data;
 
 /* FUNCTIONS FOR READ FILE */

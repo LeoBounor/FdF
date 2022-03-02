@@ -6,7 +6,7 @@
 /*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 16:29:44 by Leo               #+#    #+#             */
-/*   Updated: 2022/02/17 14:53:35 by lbounor          ###   ########lyon.fr   */
+/*   Updated: 2022/03/02 17:05:23 by lbounor          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
 
-	if ((y >= 0 && y < 1080) && (x >= 0 && x < 1920))
-	{
-		dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-		*(unsigned int *)dst = color;
-	}
+	if (x < 0 || x > 1080 || y < 0 || y > 1920)
+		return ;
+	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	*(unsigned int *)dst = color;
 }
 
 float	mod(float i)
@@ -32,8 +31,9 @@ float	mod(float i)
 
 void	isometric(float *x, float *y, int z)
 {
-	*x = (*x - *y) * cos(8);
-	*y = (*x + *y) * sin(8) - z;
+	dprintf(1, "%f %f %d\n", *x, *y, z);
+	*x = (*x - *y) * cos(0.8);
+	*y = (*x + *y) * sin(0.8) - z;
 }
 
 void	bresenham(float x0, float y0, float x1, float y1, t_data *data, t_fdf *fdf)
@@ -56,10 +56,10 @@ void	bresenham(float x0, float y0, float x1, float y1, t_data *data, t_fdf *fdf)
 		data->color = 0xffffff;
 	isometric(&x0, &y0, z);
 	isometric(&x1, &y1, z1);
-	x0 += 150;
-	y0 += 150;
-	x1 += 150;
-	y1 += 150;
+	x0 += 350;
+	y0 += 350;
+	x1 += 350;
+	y1 += 350;
 	x_step = x1 - x0;
 	y_step = y1 - y0;
 	if (x_step < 0)
@@ -68,14 +68,14 @@ void	bresenham(float x0, float y0, float x1, float y1, t_data *data, t_fdf *fdf)
 		y_step = -y_step;
 	if (x_step > y_step)
 		max = x_step;
-	else
+	else if (y_step > x_step)
 		max = y_step;
 	x_step /= max;
 	y_step /= max;
-	while ((int)(x0 - x1) || (int)(y0 - y1))
+	while (((int)(x0 - x1) <= 0 && (int)(y0 - y1) <= 0))
 	{
-		mlx_pixel_put(data->mlx_ptr, data->win_ptr, x0, y0, data->color);
-		//my_mlx_pixel_put(data, x0, y0, data->color);
+		dprintf(1, "%d %d\n", (int)(x0 - x1), (int)(y0 - y1));
+		my_mlx_pixel_put(data, x0, y0, data->color);
 		x0 += x_step;
 		y0 += y_step;
 	}
