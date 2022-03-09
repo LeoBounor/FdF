@@ -6,7 +6,7 @@
 /*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 16:29:44 by Leo               #+#    #+#             */
-/*   Updated: 2022/03/02 17:05:23 by lbounor          ###   ########lyon.fr   */
+/*   Updated: 2022/03/09 16:35:48 by lbounor          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
 
-	if (x < 0 || x > 1080 || y < 0 || y > 1920)
+	if (x < 0 || x > 1920 - 1 || y < 0 || y > 1080 - 1)
 		return ;
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
@@ -31,18 +31,22 @@ float	mod(float i)
 
 void	isometric(float *x, float *y, int z)
 {
-	dprintf(1, "%f %f %d\n", *x, *y, z);
+	int	tmp;
+
+	tmp = *x;
 	*x = (*x - *y) * cos(0.8);
-	*y = (*x + *y) * sin(0.8) - z;
+	*y = (tmp + *y) * sin(0.8) - z;
 }
 
 void	bresenham(float x0, float y0, float x1, float y1, t_data *data, t_fdf *fdf)
 {
 	float	x_step;
 	float	y_step;
-	int		max;
+	float	max;
 	int		z;
 	int		z1;
+	int		tmpx;
+	int		tmpy;
 
 	z = fdf->tab4matrix[(int)y0][(int)x0];
 	z1 = fdf->tab4matrix[(int)y1][(int)x1];
@@ -62,22 +66,13 @@ void	bresenham(float x0, float y0, float x1, float y1, t_data *data, t_fdf *fdf)
 	y1 += 350;
 	x_step = x1 - x0;
 	y_step = y1 - y0;
-	if (x_step < 0)
-		x_step = -x_step;
-	if (y_step < 0)
-		y_step = -y_step;
-	if (x_step > y_step)
-		max = x_step;
-	else if (y_step > x_step)
-		max = y_step;
-	x_step /= max;
-	y_step /= max;
-	while (((int)(x0 - x1) <= 0 && (int)(y0 - y1) <= 0))
-	{
-		dprintf(1, "%d %d\n", (int)(x0 - x1), (int)(y0 - y1));
-		my_mlx_pixel_put(data, x0, y0, data->color);
-		x0 += x_step;
-		y0 += y_step;
+	max = 0.0;
+	while (max <= 1.0)
+	{		
+		my_mlx_pixel_put(data, tmpx, tmpy, data->color);
+		tmpx = x0 + x_step * max;
+		tmpy = y0 + y_step * max;
+		max += 0.0001;
 	}
 }
 

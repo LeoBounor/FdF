@@ -1,0 +1,13 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "cc",
+            "command": "make",
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+        }
+    ],
+    "version": "2.0.0"
+}
