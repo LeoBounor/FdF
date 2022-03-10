@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: Leo <Leo@student.42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 15:36:55 by Leo               #+#    #+#             */
-/*   Updated: 2022/03/02 15:31:23 by lbounor          ###   ########lyon.fr   */
+/*   Updated: 2022/03/09 21:07:28 by Leo              ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,25 @@ typedef struct s_data {
 	int		endian;
 	int		zoom;
 	int		color;
+	int		shift_x;
+	int		shift_y;
 	void	*mlx;
 	void	*mlx_win;
 }	t_data;
+
+typedef struct s_point {
+	float	x0;
+	float	y0;
+	float	x1;
+	float	y1;
+	float	x_step;
+	float	y_step;
+	float	max;
+	int		z;
+	int		z1;
+	int		tmp_x;
+	int		tmp_y;
+}	t_point;
 
 /* FUNCTIONS FOR READ FILE */
 void	ft_readfile(char *file, t_fdf *fdf);
@@ -46,10 +62,11 @@ int		ft_getheight(char *file);
 
 /* FUNCTIONS FOR DRAW */
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-float	mod(float i);
 void	isometric(float *x, float *y, int z);
-void	bresenham(float x0, float y0, float x1, float y1, t_data *data, t_fdf *fdf);
+void	bresenham(t_point *point, t_data *data, t_fdf *fdf);
 void	drawline(t_data *data, t_fdf *fdf);
+void	condition_x(int *x, int *y, t_point *point);
+void	condition_y(int *x, int *y, t_point *point);
 
 /* FUNCTIONS UTILS */
 char	**ft_split(const char *s, char c);

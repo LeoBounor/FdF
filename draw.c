@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: Leo <Leo@student.42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 16:29:44 by Leo               #+#    #+#             */
-/*   Updated: 2022/03/09 16:35:48 by lbounor          ###   ########lyon.fr   */
+/*   Updated: 2022/03/09 21:19:04 by Leo              ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,10 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
 
-	if (x < 0 || x > 1920 - 1 || y < 0 || y > 1080 - 1)
+	if (x < 0 || x > 1000 - 1 || y < 0 || y > 1000 - 1)
 		return ;
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
-}
-
-float	mod(float i)
-{
-	if (i < 0)
-		return (-i);
-	return (i);
 }
 
 void	isometric(float *x, float *y, int z)
@@ -34,52 +27,45 @@ void	isometric(float *x, float *y, int z)
 	int	tmp;
 
 	tmp = *x;
-	*x = (*x - *y) * cos(0.8);
-	*y = (tmp + *y) * sin(0.8) - z;
+	*x = (*x - *y) * cos(0.5);
+	*y = (tmp + *y) * sin(0.5) - z;
 }
 
-void	bresenham(float x0, float y0, float x1, float y1, t_data *data, t_fdf *fdf)
+void	bresenham(t_point *point, t_data *data, t_fdf *fdf)
 {
-	float	x_step;
-	float	y_step;
-	float	max;
-	int		z;
-	int		z1;
-	int		tmpx;
-	int		tmpy;
-
-	z = fdf->tab4matrix[(int)y0][(int)x0];
-	z1 = fdf->tab4matrix[(int)y1][(int)x1];
-	x0 *= data->zoom;
-	x1 *= data->zoom;
-	y0 *= data->zoom;
-	y1 *= data->zoom;
-	if (z || z1)
+	point->z = fdf->tab4matrix[(int)point->y0][(int)point->x0];
+	point->z1 = fdf->tab4matrix[(int)point->y1][(int)point->x1];
+	point->x0 *= data->zoom;
+	point->x1 *= data->zoom;
+	point->y0 *= data->zoom;
+	point->y1 *= data->zoom;
+	if (point->z || point->z1)
 		data->color = 0xe80c0c;
 	else
 		data->color = 0xffffff;
-	isometric(&x0, &y0, z);
-	isometric(&x1, &y1, z1);
-	x0 += 350;
-	y0 += 350;
-	x1 += 350;
-	y1 += 350;
-	x_step = x1 - x0;
-	y_step = y1 - y0;
-	max = 0.0;
-	while (max <= 1.0)
+	isometric(&point->x0, &point->y0, point->z);
+	isometric(&point->x1, &point->y1, point->z1);
+	point->x0 += data->shift_x;
+	point->y0 += data->shift_y;
+	point->x1 += data->shift_x;
+	point->y1 += data->shift_y;
+	point->x_step = point->x1 - point->x0;
+	point->y_step = point->y1 - point->y0;
+	point->max = 0.0;
+	while (point->max <= 1.0)
 	{		
-		my_mlx_pixel_put(data, tmpx, tmpy, data->color);
-		tmpx = x0 + x_step * max;
-		tmpy = y0 + y_step * max;
-		max += 0.0001;
+		my_mlx_pixel_put(data, point->tmp_x, point->tmp_y, data->color);
+		point->tmp_x = point->x0 + point->x_step * point->max;
+		point->tmp_y = point->y0 + point->y_step * point->max;
+		point->max += 0.0001;
 	}
 }
 
 void	drawline(t_data *data, t_fdf *fdf)
 {
-	int	x;
-	int	y;
+	t_point	point;
+	int		x;
+	int		y;
 
 	y = 0;
 	while (y < fdf->height)
@@ -88,11 +74,32 @@ void	drawline(t_data *data, t_fdf *fdf)
 		while (x < fdf->width)
 		{
 			if (x < fdf->width - 1)
-				bresenham(x, y, x + 1, y, data, fdf);
+			{
+				condition_x(&x, &y, &point);
+				bresenham(&point, data, fdf);
+			}
 			if (y < fdf->height - 1)
-				bresenham(x, y, x, y + 1, data, fdf);
+			{
+				condition_y(&x, &y, &point);
+				bresenham(&point, data, fdf);
+			}
 			x++;
 		}
 		y++;
 	}
+}
+
+void	condition_x(int *x, int *y, t_point *point)
+{
+	point->x0 = *x;
+	point->x1 = *x + 1;
+	point->y0 = *y;
+	point->y1 = *y;
+}
+
+void	condition_y(int *x, int *y, t_point *point){
+	point->x0 = *x;
+	point->x1 = *x;
+	point->y0 = *y;
+	point->y1 = *y + 1;
 }
