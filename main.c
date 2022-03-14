@@ -3,48 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Leo <Leo@student.42lyon.fr>                +#+  +:+       +#+        */
+/*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 10:37:09 by Leo               #+#    #+#             */
-/*   Updated: 2022/03/09 21:32:31 by Leo              ###   ########lyon.fr   */
+/*   Updated: 2022/03/14 15:25:38 by lbounor          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	deal_key(int key, t_data *data, t_fdf *fdf)
+void	clear_win(t_fdf *fdf)
 {
-	printf("%d\n", key);
+	int		x;
+	int		y;
+
+	y = 0;
+	while (y < fdf->height)
+	{
+		x = 0;
+		while (x < fdf->width)
+		{
+			my_mlx_pixel_put(fdf->img, x, y, data->color);
+			x++;
+		}
+		y++;
+	}
+}
+
+int	deal_key(int key, t_fdf *fdf)
+{
 	if (key == 126)
-		data->shift_y -= 10;
+		fdf->img.shift_y -= 10;
 	if (key == 125)
-		data->shift_y += 10;
+		fdf->img.shift_y += 10;
 	if (key == 124)
-		data->shift_x -= 10;
+		fdf->img.shift_x -= 10;
 	if (key == 123)
-		data->shift_x += 10;
-	//mlx_clear_window(data->mlx, data->mlx_win);
-	drawline(data, fdf);
-	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 30, 30);
+		fdf->img.shift_x += 10;
+	mlx_clear_window(fdf->img.mlx, fdf->img.mlx_win);
+	drawline(&fdf->img, fdf);
+	mlx_put_image_to_window(fdf->img.mlx, fdf->img.mlx_win, fdf->img.img, 30, 30);
 	return (0);
 }
 
 int	main(int argc, char **argv)
 {
-	t_data	img;
 	t_fdf	fdf;
 
 	ft_readfile(argv[1], &fdf);
-	img.shift_x = 0;
-	img.shift_y = 0;
-	img.mlx = mlx_init();
-	img.mlx_win = mlx_new_window(img.mlx, 1000, 1000, "Hello world!");
-	img.zoom = 15;
-	img.img = mlx_new_image(img.mlx, 1000, 1000);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel,
-			&img.line_length, &img.endian);
-	drawline(&img, &fdf);
-	mlx_key_hook(img.mlx_win, deal_key, &img);
-	mlx_put_image_to_window(img.mlx, img.mlx_win, img.img, 30, 30);
-	mlx_loop(img.mlx);
+	fdf.img.mlx = mlx_init();
+	fdf.img.mlx_win = mlx_new_window(fdf.img.mlx, 1000, 1000, "Fdf!");
+	fdf.img.zoom = 15;
+	fdf.img.img = mlx_new_image(fdf.img.mlx, 1000, 1000);
+	fdf.img.addr = mlx_get_data_addr(fdf.img.img, &fdf.img.bits_per_pixel,
+			&fdf.img.line_length, &fdf.img.endian);
+	drawline(&fdf.img, &fdf);
+	mlx_key_hook(fdf.img.mlx_win, deal_key, &fdf);
+	mlx_put_image_to_window(fdf.img.mlx, fdf.img.mlx_win, fdf.img.img, 30, 30);
+	mlx_loop(fdf.img.mlx);
 }

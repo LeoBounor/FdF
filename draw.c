@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Leo <Leo@student.42lyon.fr>                +#+  +:+       +#+        */
+/*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 16:29:44 by Leo               #+#    #+#             */
-/*   Updated: 2022/03/09 21:19:04 by Leo              ###   ########lyon.fr   */
+/*   Updated: 2022/03/14 15:24:46 by lbounor          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ void	condition_x(int *x, int *y, t_point *point)
 	point->y1 = *y;
 }
 
-void	condition_y(int *x, int *y, t_point *point){
+void	condition_y(int *x, int *y, t_point *point)
+{
 	point->x0 = *x;
 	point->x1 = *x;
 	point->y0 = *y;

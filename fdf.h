@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Leo <Leo@student.42lyon.fr>                +#+  +:+       +#+        */
+/*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 15:36:55 by Leo               #+#    #+#             */
-/*   Updated: 2022/03/09 21:07:28 by Leo              ###   ########lyon.fr   */
+/*   Updated: 2022/03/14 10:56:09 by lbounor          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,6 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
-
-typedef struct s_fdf
-{
-	int			width;
-	int			height;
-	int			**tab4matrix;
-}	t_fdf;
 
 typedef struct s_data {
 	void	*img;
@@ -39,6 +32,14 @@ typedef struct s_data {
 	void	*mlx;
 	void	*mlx_win;
 }	t_data;
+
+typedef struct s_fdf
+{
+	int				width;
+	int				height;
+	int				**tab4matrix;
+	struct s_data	img;
+}	t_fdf;
 
 typedef struct s_point {
 	float	x0;
