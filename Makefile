@@ -6,47 +6,46 @@
 #    By: lbounor <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/02 16:28:13 by Leo               #+#    #+#              #
-#    Updated: 2022/05/04 11:01:46 by lbounor          ###   ########lyon.fr    #
+#    Updated: 2022/06/22 13:48:26 by lbounor          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = fdf.a
+NAME = fdf
 
-SRCS = sources/ft_printf.c 					\
-		sources/ft_parse_printf.c 			\
-		sources/ft_args_sort.c 				\
-		sources/ft_putchar_args.c 			\
-		sources/ft_putstr_args.c 			\
-		sources/ft_putptr_args.c 			\
-		sources/ft_putnbr_args.c 			\
-		sources/ft_putnbr_unsigned_args.c 	\
-		sources/ft_puthex_x_args.c 			\
-		sources/ft_puthex_ux_args.c 		\
-		sources/ft_percent_args.c 			\
+SRCS = 	draw.c 									\
+		fdf_utils_2.c 							\
+		fdf_utils.c 							\
+		main.c 									\
+		read_file.c 							\
+		get_next_line/get_next_line_utils.c 	\
+		get_next_line/get_next_line.c 			\
+		
+HEADER		=	fdf.h 							\
+				get_next_line/get_next_line.h	\
+				
+OBJS		= ${SRCS:.c=.o}
 
-OBJS = ${SRCS:.c=.o}
-
-INCLUDES = includes/ft_printf.h
-
-CC = gcc
+CFLAGS = -Wall -Wextra -Werror
+CC = cc
 RM = rm -f
-
-FLAGS = -Wall -Wextra -Werror
-
-%.o : %.c ${INCLUDES}
-	${CC} ${FLAGS} -I includes -c $< -o ${<:.c=.o}
-
-$(NAME): ${OBJS} 
-	ar rcs ${NAME} ${OBJS} 
 
 all: ${NAME}
 
-clean:
-	${RM} ${OBJS}
+$(NAME) : ${SRCS} $(HEADER) Makefile
+	@$(CC) $(CFLAGS) $(SRCS) minilibx_macos/libmlx.a -framework OpenGL -framework AppKit -o ${NAME}
+	@echo "\033[92m\n[- COMPILATION COMPLETE -]\n\033[0m"
+	@echo "\033[94m\n[- PLEASE LAUNCH FDF WITH A MAP AS AN ARGUMENT -]\n\033[0m"
 
-fclean:	clean
+%.o : %.c $(HEADER)
+	$(CC) $(CFLAGS) -c $< -o -o3 $@
+
+clean :
+	${RM} ${OBJS}
+	@echo "\033[91m\n[- FILES DELETED -]\n\033[0m"
+
+fclean : clean
 	${RM} ${NAME}
 
-re:	fclean all
-         
-.PHONY: all clean fclean re
+re : fclean all
+
+.PHONY : all clean fclean re

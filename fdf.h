@@ -6,7 +6,7 @@
 /*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 15:36:55 by Leo               #+#    #+#             */
-/*   Updated: 2022/03/15 10:50:38 by lbounor          ###   ########lyon.fr   */
+/*   Updated: 2022/06/22 14:26:19 by lbounor          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void	isometric(float *x, float *y, int z);
 void	bresenham(t_point *point, t_data *data, t_fdf *fdf);
 void	drawline(t_data *data, t_fdf *fdf);
-void	condition_x(int *x, int *y, t_point *point);
-void	condition_y(int *x, int *y, t_point *point);
 
 /* FUNCTIONS UTILS */
 char	**ft_split(const char *s, char c);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 size_t	ft_strlen(char *str);
 int		ft_atoi(const char *str);
+void	free_array(t_fdf *fdf);
+int		exit_prg(t_fdf *fdf);
 
 #endif

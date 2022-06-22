@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Leo <Leo@student.42lyon.fr>                +#+  +:+       +#+        */
+/*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 15:36:45 by Leo               #+#    #+#             */
-/*   Updated: 2022/01/12 15:13:44 by Leo              ###   ########lyon.fr   */
+/*   Updated: 2022/06/22 14:28:10 by lbounor          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,23 @@ int	ft_getheight(char *file)
 {
 	int		height;
 	int		fd;
+	char	*line;
 
 	fd = open(file, O_RDONLY, 0);
+	if (fd < 0)
+	{
+		write(2, "This file doesn't exist, please indicate the right path.",
+			57);
+		return (0);
+	}
 	height = 0;
-	while (get_next_line(fd))
+	line = get_next_line(fd);
+	while (line)
+	{
 		height++;
+		free(line);
+		line = get_next_line(fd);
+	}
 	close(fd);
 	return (height);
 }
@@ -57,11 +69,13 @@ void	ft_readfile(char *file, t_fdf *fdf)
 	char	*line;
 
 	fdf->height = ft_getheight(file);
+	if (fdf->height == 0)
+		exit (EXIT_FAILURE);
 	fdf->width = ft_getwidth(file);
-	fdf->tab4matrix = (int **)malloc(sizeof(int *) * (fdf->height + 1));
+	fdf->tab4matrix = (int **)malloc(sizeof(int *) * (fdf->height));
 	i = 0;
-	while (i <= fdf->height)
-		fdf->tab4matrix[i++] = (int *)malloc(sizeof(int) * (fdf->width + 1));
+	while (i < fdf->height)
+		fdf->tab4matrix[i++] = (int *)malloc(sizeof(int) * (fdf->width));
 	fd = open(file, O_RDONLY, 0);
 	i = 0;
 	line = NULL;
@@ -73,7 +87,6 @@ void	ft_readfile(char *file, t_fdf *fdf)
 		i++;
 	}
 	close(fd);
-	fdf->tab4matrix[i] = NULL;
 }
 
 void	ft_fill_matrix(int *tab4matrix, char *line)
@@ -87,7 +100,16 @@ void	ft_fill_matrix(int *tab4matrix, char *line)
 	{
 		tab4matrix[i] = ft_atoi(nbs[i]);
 		free(nbs[i]);
+		nbs[i] = NULL;
 		i++;
 	}
 	free(nbs);
+	nbs = NULL;
+}
+
+int	exit_prg(t_fdf *fdf)
+{
+	free_array(fdf);
+	exit (EXIT_SUCCESS);
+	return (0);
 }

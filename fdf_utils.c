@@ -6,7 +6,7 @@
 /*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 11:21:14 by Leo               #+#    #+#             */
-/*   Updated: 2022/05/04 11:19:09 by lbounor          ###   ########lyon.fr   */
+/*   Updated: 2022/06/22 13:38:05 by lbounor          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ static void	*ft_freesplit(char **split, size_t n)
 {
 	size_t	i;
 
-	i = n - 1;
+	i = 0;
 	while (i < n)
-		free(split[i--]);
+		free(split[i++]);
 	free(split);
 	return (NULL);
 }

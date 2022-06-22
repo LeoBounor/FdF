@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fdf_utils_suite.c                                  :+:      :+:    :+:   */
+/*   fdf_utils_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/04 11:18:39 by lbounor           #+#    #+#             */
-/*   Updated: 2022/05/04 11:19:15 by lbounor          ###   ########lyon.fr   */
+/*   Created: 2022/06/22 10:08:34 by lbounor           #+#    #+#             */
+/*   Updated: 2022/06/22 13:41:32 by lbounor          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,19 @@ int	ft_atoi(const char *str)
 		str++;
 	}
 	return (nombre * signe);
+}
+
+void	free_array(t_fdf *fdf)
+{
+	int	i;
+
+	i = 0;
+	while (i < fdf->height)
+	{
+		free(fdf->tab4matrix[i]);
+		fdf->tab4matrix[i] = NULL;
+		i++;
+	}
+	free(fdf->tab4matrix);
+	fdf->tab4matrix = NULL;
 }

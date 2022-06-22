@@ -6,7 +6,7 @@
 /*   By: lbounor <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 10:37:09 by Leo               #+#    #+#             */
-/*   Updated: 2022/05/04 13:23:06 by lbounor          ###   ########lyon.fr   */
+/*   Updated: 2022/06/22 14:32:05 by lbounor          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,15 @@ int	deal_key(int key, t_fdf *fdf)
 		fdf->img.zoom += 2;
 	if (key == 7)
 		fdf->img.zoom -= 2;
-	if (key == 27)
+	if (key == 53)
+	{
+		free_array(fdf);
 		exit (EXIT_SUCCESS);
+	}
 	clear_win(fdf);
 	drawline(&fdf->img, fdf);
 	mlx_put_image_to_window(fdf->img.mlx, fdf->img.mlx_win,
-		fdf->img.img, 30, 30);
+		fdf->img.img, 0, 0);
 	return (0);
 }
 
@@ -77,6 +80,11 @@ int	main(int argc, char **argv)
 {
 	t_fdf	fdf;
 
+	if (argc != 2)
+	{
+		write(2, "Error arguments!", 17);
+		return (0);
+	}
 	ft_readfile(argv[1], &fdf);
 	fdf.img.mlx = mlx_init();
 	fdf.img.mlx_win = mlx_new_window(fdf.img.mlx, 1000, 1000, "Fdf!");
@@ -86,6 +94,8 @@ int	main(int argc, char **argv)
 			&fdf.img.line_length, &fdf.img.endian);
 	drawline(&fdf.img, &fdf);
 	mlx_key_hook(fdf.img.mlx_win, deal_key, &fdf);
-	mlx_put_image_to_window(fdf.img.mlx, fdf.img.mlx_win, fdf.img.img, 30, 30);
+	mlx_hook(fdf.img.mlx_win, 17, 1L << 0, exit_prg, &fdf);
+	mlx_put_image_to_window(fdf.img.mlx, fdf.img.mlx_win, fdf.img.img, 0, 0);
 	mlx_loop(fdf.img.mlx);
+	return (0);
 }
